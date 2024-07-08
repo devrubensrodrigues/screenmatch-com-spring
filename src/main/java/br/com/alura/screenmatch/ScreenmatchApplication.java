@@ -3,6 +3,7 @@ package br.com.alura.screenmatch;
 import br.com.alura.screenmatch.model.DadosEpsodio;
 import br.com.alura.screenmatch.model.DadosSerie;
 import br.com.alura.screenmatch.model.DadosTemporada;
+import br.com.alura.screenmatch.principal.Principal;
 import br.com.alura.screenmatch.service.ConsumoAPI;
 import br.com.alura.screenmatch.service.ConverteDados;
 import org.springframework.boot.CommandLineRunner;
@@ -20,14 +21,10 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		var consumoAPI = new ConsumoAPI();
-		var json = consumoAPI.obterDados(
-				"https://www.omdbapi.com/?t="
-				+ "gilmore+girls&"
-				+ "&apikey=53fd5cbd");
-		System.out.println(json);
 
-		ConverteDados conversor = new ConverteDados();
+		Principal principal = new Principal();
+		principal.exibeMenu();
+		/*ConverteDados conversor = new ConverteDados();
 		DadosSerie serie1= conversor.obterDados(json, DadosSerie.class);
 
 		System.out.println("Formato convertido em DadosSerie:");
@@ -54,6 +51,6 @@ public class ScreenmatchApplication implements CommandLineRunner {
 			list.add(dadosTemporada = conversor.obterDados(json,
 					DadosTemporada.class));
 		}
-		list.forEach(System.out::println);
+		list.forEach(System.out::println);*/
 	}
 }
