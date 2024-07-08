@@ -1,6 +1,5 @@
 package br.com.alura.screenmatch.principal;
 
-import br.com.alura.screenmatch.model.DadosEpsodio;
 import br.com.alura.screenmatch.model.DadosSerie;
 import br.com.alura.screenmatch.model.DadosTemporada;
 import br.com.alura.screenmatch.service.ConsumoAPI;
@@ -19,10 +18,11 @@ public class Principal {
     private final String API_KEY = "&apikey=53fd5cbd";
     public void exibeMenu() {
         System.out.println("Digite o nome da série para busca:");
-        var nomeSerie = leitura.nextLine();
+        var nomeSerie = leitura.nextLine()
+                .replace(" ", "+");
 
         var json = consumo.obterDados(
-        ENDERECO + nomeSerie.replace(" ", "+")
+        ENDERECO + nomeSerie
                 + API_KEY);
 
         DadosSerie dados= conversor.obterDados(json, DadosSerie.class);
@@ -42,7 +42,7 @@ public class Principal {
             temporadas.add(dadosTemporada);
         }
         temporadas.forEach(System.out::println);
-        
+
         temporadas.forEach(t -> t
                 .episodios()
                 .forEach(e -> System.out.println(e.titulo())));
