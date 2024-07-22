@@ -1,57 +1,76 @@
 package br.com.alura.screenmatch.principal;
 
-import br.com.alura.screenmatch.model.DadosEpsodio;
 import br.com.alura.screenmatch.model.DadosSerie;
 import br.com.alura.screenmatch.model.DadosTemporada;
-import br.com.alura.screenmatch.model.Episodio;
+import br.com.alura.screenmatch.model.enums.Categoria;
 import br.com.alura.screenmatch.service.ConsumoAPI;
 import br.com.alura.screenmatch.service.ConverteDados;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Principal {
-    
+    // Desafio para próxima aula: adicionar mais informações devolvidas pela API,
+    // Categoria/Gênero para poder separar série por categoria, imagem de poster para o time de front
+    // Sinopse e Atores.
     private Scanner leitura = new Scanner(System.in);
     private ConsumoAPI consumo = new ConsumoAPI();
     private ConverteDados conversor = new ConverteDados();
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=53fd5cbd";
+    private List<DadosSerie> dadosSeries = new ArrayList<>();
     public void exibeMenu() {
-        var menu = """
-                1- Buscar séries
-                2- Buscar episódios
-                                
-                0- Sair
-                """;
-        System.out.println(menu);
-        var opcao = leitura.nextInt();
-        leitura.nextLine();
 
-        switch (opcao) {
-            case 1:
-                buscarSerieWeb();
-                break;
-            case 2:
-                buscarEpisodioPorSerie();
-                break;
-            case 0:
-                System.out.println("Saindo...");
-                break;
-            default:
-                System.out.println("opção inválida");
+        var opcao = -1;
+        while(opcao != 0) {
+            var menu = """
+                    1- Buscar séries
+                    2- Buscar episódios
+                    3- Listar séries buscadas
+                    4- Buscar por gênero
+                                    
+                    0- Sair
+                    """;
+            System.out.println(menu);
+            opcao = leitura.nextInt();
+            leitura.nextLine();
+
+            switch (opcao) {
+                case 1:
+                    buscarSerieWeb();
+                    break;
+                case 2:
+                    buscarEpisodioPorSerie();
+                    break;
+                case 3:
+                    listarSeriesBuscadas();
+                    break;
+                case 4:
+                    fromString(leitura.nextLine());
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("opção inválida");
+            }
         }
     }
+
+    private void listarSeriesBuscadas() {
+        dadosSeries.forEach(System.out::println);
+    }
+
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
+        dadosSeries.add(dados);
         System.out.println(dados);
     }
     private DadosSerie getDadosSerie() {
         System.out.print("Digite o nome da série para busca:");
         var nomeSerie = leitura.nextLine();
-        var json = consumo.obterDados(ENDERECO + nomeSerie + API_KEY);
+        var json = consumo.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
         DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
         return dados;
     }
@@ -71,5 +90,15 @@ public class Principal {
             temporadas.add(dadosTemporada);
         }
         temporadas.forEach(System.out::println);
+    }
+    //Método não está funcional
+    public static Categoria fromString(String text){
+        for (Categoria categoria : Categoria.values()) {
+            if (categoria.equals(text.toUpperCase())){
+                return categoria;
+            }
+        }
+        throw new IllegalArgumentException("Nenhuma categoria encontrada para a string fornecida: "
+                + text);
     }
 }
