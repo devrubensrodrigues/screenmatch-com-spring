@@ -9,6 +9,6 @@ public record DadosSerie(@JsonAlias("Title") String titulo,
                          @JsonAlias("imdbRating") String avaliacao,
                          @JsonAlias("Actors") String atores,
                          @JsonAlias("Plot") String sinopse,
-                         @JsonAlias("Genre") String categoria,
+                         @JsonAlias("Genre") String genero,
                          @JsonAlias("Poster") String poster) {
 }

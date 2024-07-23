@@ -47,7 +47,6 @@ public class Principal {
                     listarSeriesBuscadas();
                     break;
                 case 4:
-                    fromString(leitura.nextLine());
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -90,15 +89,5 @@ public class Principal {
             temporadas.add(dadosTemporada);
         }
         temporadas.forEach(System.out::println);
-    }
-    //Método não está funcional
-    public static Categoria fromString(String text){
-        for (Categoria categoria : Categoria.values()) {
-            if (categoria.equals(text.toUpperCase())){
-                return categoria;
-            }
-        }
-        throw new IllegalArgumentException("Nenhuma categoria encontrada para a string fornecida: "
-                + text);
     }
 }
