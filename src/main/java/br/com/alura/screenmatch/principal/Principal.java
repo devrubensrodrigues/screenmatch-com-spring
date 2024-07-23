@@ -2,24 +2,22 @@ package br.com.alura.screenmatch.principal;
 
 import br.com.alura.screenmatch.model.DadosSerie;
 import br.com.alura.screenmatch.model.DadosTemporada;
-import br.com.alura.screenmatch.model.enums.Categoria;
+import br.com.alura.screenmatch.model.Serie;
 import br.com.alura.screenmatch.service.ConsumoAPI;
 import br.com.alura.screenmatch.service.ConverteDados;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
 public class Principal {
-    // Desafio para próxima aula: adicionar mais informações devolvidas pela API,
-    // Categoria/Gênero para poder separar série por categoria, imagem de poster para o time de front
-    // Sinopse e Atores.
     private Scanner leitura = new Scanner(System.in);
     private ConsumoAPI consumo = new ConsumoAPI();
     private ConverteDados conversor = new ConverteDados();
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
     private final String API_KEY = "&apikey=53fd5cbd";
-    private List<DadosSerie> dadosSeries = new ArrayList<>();
+    private List<Serie> series = new ArrayList<>();
     public void exibeMenu() {
 
         var opcao = -1;
@@ -28,7 +26,6 @@ public class Principal {
                     1- Buscar séries
                     2- Buscar episódios
                     3- Listar séries buscadas
-                    4- Buscar por gênero
                                     
                     0- Sair
                     """;
@@ -47,6 +44,7 @@ public class Principal {
                     listarSeriesBuscadas();
                     break;
                 case 4:
+                    //buscarPorGenero();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -58,12 +56,14 @@ public class Principal {
     }
 
     private void listarSeriesBuscadas() {
-        dadosSeries.forEach(System.out::println);
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
     }
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
-        dadosSeries.add(dados);
+        series.add(new Serie(dados));
         System.out.println(dados);
     }
     private DadosSerie getDadosSerie() {
