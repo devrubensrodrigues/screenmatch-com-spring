@@ -1,6 +1,7 @@
 package br.com.alura.screenmatch.model;
 
 import br.com.alura.screenmatch.model.enums.Categoria;
+import br.com.alura.screenmatch.service.traducao.ConsultaMyMemory;
 
 import java.util.OptionalDouble;
 
@@ -19,7 +20,7 @@ public class Serie {
         this.totalTemporadas = dadosSerie.totalTemporadas();
         this.avaliacao = OptionalDouble.of(Double.valueOf(dadosSerie.avaliacao())).orElse(0);
         this.atores = dadosSerie.atores();
-        this.sinopse = dadosSerie.sinopse();
+        this.sinopse = ConsultaMyMemory.obterTraducao(dadosSerie.sinopse()).trim();
         this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
         this.poster = dadosSerie.poster();
     }
