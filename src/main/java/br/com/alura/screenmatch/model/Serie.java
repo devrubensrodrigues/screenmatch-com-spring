@@ -2,18 +2,29 @@ package br.com.alura.screenmatch.model;
 
 import br.com.alura.screenmatch.model.enums.Categoria;
 import br.com.alura.screenmatch.service.traducao.ConsultaMyMemory;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.OptionalDouble;
 
+@Entity
+@Table(name = "series")
 public class Serie {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(unique = true)
     private String titulo;
     private Integer totalTemporadas;
     private Double avaliacao;
     private String atores;
     private String sinopse;
+    @Enumerated(EnumType.STRING)
     private Categoria genero;
     private String poster;
+    private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(DadosSerie dadosSerie) {
         this.titulo = dadosSerie.titulo();
@@ -23,6 +34,18 @@ public class Serie {
         this.sinopse = ConsultaMyMemory.obterTraducao(dadosSerie.sinopse()).trim();
         this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
         this.poster = dadosSerie.poster();
+    }
+
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitulo() {
