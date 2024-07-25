@@ -14,7 +14,7 @@ public class Serie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column(unique = true)
     private String titulo;
     private Integer totalTemporadas;
@@ -24,6 +24,7 @@ public class Serie {
     @Enumerated(EnumType.STRING)
     private Categoria genero;
     private String poster;
+    @Transient
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie(DadosSerie dadosSerie) {
