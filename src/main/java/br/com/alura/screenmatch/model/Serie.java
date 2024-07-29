@@ -24,7 +24,7 @@ public class Serie {
     @Enumerated(EnumType.STRING)
     private Categoria genero;
     private String poster;
-    @OneToMany(mappedBy = "serie")
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie() {}

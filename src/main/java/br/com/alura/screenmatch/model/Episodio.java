@@ -20,6 +20,7 @@ public class Episodio {
     @ManyToOne
     private Serie serie;
 //Código para revisão
+    public Episodio() {}
     public Episodio(Integer numeroTemp, DadosEpsodio dadosEpsodio) {
         this.season = numeroTemp;
         this.title = dadosEpsodio.titulo();

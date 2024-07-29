@@ -1,7 +1,9 @@
 package br.com.alura.screenmatch.principal;
 
-import br.com.alura.screenmatch.model.*;
-import br.com.alura.screenmatch.repository.EpisodioRepository;
+import br.com.alura.screenmatch.model.DadosSerie;
+import br.com.alura.screenmatch.model.DadosTemporada;
+import br.com.alura.screenmatch.model.Episodio;
+import br.com.alura.screenmatch.model.Serie;
 import br.com.alura.screenmatch.repository.SerieRepository;
 import br.com.alura.screenmatch.service.ConsumoAPI;
 import br.com.alura.screenmatch.service.ConverteDados;
@@ -19,7 +21,6 @@ public class Principal {
     private List<Serie> series = new ArrayList<>();
     private List<Episodio> episodios = new ArrayList<>();
     private SerieRepository repositorio;
-    private EpisodioRepository EPRepository;
     public Principal(SerieRepository repositorio) {
         this.repositorio = repositorio;
     }
