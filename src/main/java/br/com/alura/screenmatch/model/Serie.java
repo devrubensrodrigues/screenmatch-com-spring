@@ -24,7 +24,7 @@ public class Serie {
     @Enumerated(EnumType.STRING)
     private Categoria genero;
     private String poster;
-    @Transient
+    @OneToMany(mappedBy = "serie")
     private List<Episodio> episodios = new ArrayList<>();
 
     public Serie() {}
@@ -40,6 +40,10 @@ public class Serie {
 
     public List<Episodio> getEpisodios() {
         return episodios;
+    }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        this.episodios = episodios;
     }
 
     public long getId() {
