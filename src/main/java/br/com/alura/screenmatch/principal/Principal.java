@@ -4,6 +4,7 @@ import br.com.alura.screenmatch.model.DadosSerie;
 import br.com.alura.screenmatch.model.DadosTemporada;
 import br.com.alura.screenmatch.model.Episodio;
 import br.com.alura.screenmatch.model.Serie;
+import br.com.alura.screenmatch.model.enums.Categoria;
 import br.com.alura.screenmatch.repository.SerieRepository;
 import br.com.alura.screenmatch.service.ConsumoAPI;
 import br.com.alura.screenmatch.service.ConverteDados;
@@ -35,7 +36,7 @@ public class Principal {
                     4- Buscar série por título
                     5- Buscar séries por ator
                     6- Top 5 séries
-                    7- Buscar 
+                    7- Buscar séries por categoria
                    
                     0- Sair
                     """;
@@ -62,6 +63,9 @@ public class Principal {
                 case 6:
                     buscarTop5Series();
                     break;
+                case 7:
+                    buscarSeriesPorCategoria();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -84,6 +88,7 @@ public class Principal {
         repositorio.save(new Serie(dados));
         System.out.println(dados);
     }
+
     private DadosSerie getDadosSerie() {
         System.out.print("Digite o nome da série para busca:");
         var nomeSerie = leitura.nextLine();
@@ -91,6 +96,7 @@ public class Principal {
         DadosSerie dados = conversor.obterDados(json, DadosSerie.class);
         return dados;
     }
+
     private void listarEpisodiosBuscado() {
         listarSeriesBuscadas();
         System.out.print("Digite o nome da série para busca:");
@@ -127,6 +133,7 @@ public class Principal {
             System.out.println("Série não encontrada");
         }
     }
+
     private void buscarSeriePorTitulo() {
         System.out.print("Digite o nome da série para busca:");
         var nomeSerie = leitura.nextLine();
@@ -138,6 +145,7 @@ public class Principal {
             System.out.println("Série não encontrada!");
         }
     }
+
     private void buscarSeriesPorAtor() {
         System.out.print("Qual o nome para busca? ");
         var nomeDoAtor = leitura.nextLine();
@@ -149,9 +157,19 @@ public class Principal {
         seriesEncontradas.forEach(x ->
                 System.out.println("Série: " + x.getTitulo() + " | Avaliação: " + x.getAvaliacao()));
     }
+
     private void buscarTop5Series() {
         series = repositorio.findTop5ByOrderByAvaliacaoDesc();
         series.forEach(x ->
                 System.out.println("Série: " + x.getTitulo() + " | Avaliação: " + x.getAvaliacao()));
+    }
+
+    private void buscarSeriesPorCategoria() {
+        System.out.println("Deseja buscar séries de que gênero?");
+        var categoriaEscolhida = leitura.nextLine();
+
+        series = repositorio.findByGenero(Categoria.fromPortugues(categoriaEscolhida));
+        System.out.println("Séries da categoria: " + categoriaEscolhida);
+        series.forEach(System.out::println);
     }
 }
