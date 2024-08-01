@@ -19,7 +19,6 @@ public class Principal {
     private final String API_KEY = "&apikey=53fd5cbd";
     private String json;
     private List<Serie> series = new ArrayList<>();
-    private List<Episodio> episodios = new ArrayList<>();
     private SerieRepository repositorio;
     public Principal(SerieRepository repositorio) {
         this.repositorio = repositorio;
@@ -35,6 +34,8 @@ public class Principal {
                     3- Listar séries buscadas
                     4- Buscar série por título
                     5- Buscar séries por ator
+                    6- Top 5 séries
+                    7- Buscar 
                    
                     0- Sair
                     """;
@@ -58,6 +59,9 @@ public class Principal {
                 case 5:
                     buscarSeriesPorAtor();
                     break;
+                case 6:
+                    buscarTop5Series();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -66,6 +70,7 @@ public class Principal {
             }
         }
     }
+
     private void listarSeriesBuscadas() {
         series = repositorio.findAll();
         series.stream()
@@ -142,6 +147,11 @@ public class Principal {
         List<Serie> seriesEncontradas =
                 repositorio.findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(nomeDoAtor, avaliacao);
         seriesEncontradas.forEach(x ->
+                System.out.println("Série: " + x.getTitulo() + " | Avaliação: " + x.getAvaliacao()));
+    }
+    private void buscarTop5Series() {
+        series = repositorio.findTop5ByOrderByAvaliacaoDesc();
+        series.forEach(x ->
                 System.out.println("Série: " + x.getTitulo() + " | Avaliação: " + x.getAvaliacao()));
     }
 }
