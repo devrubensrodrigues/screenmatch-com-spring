@@ -37,6 +37,7 @@ public class Principal {
                     5- Buscar séries por ator
                     6- Top 5 séries
                     7- Buscar séries por categoria
+                    8- Buscar séries por total de temporada
                    
                     0- Sair
                     """;
@@ -65,6 +66,9 @@ public class Principal {
                     break;
                 case 7:
                     buscarSeriesPorCategoria();
+                    break;
+                case 8:
+                    buscarSeriesPorTotalTemporada();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -170,6 +174,17 @@ public class Principal {
 
         series = repositorio.findByGenero(Categoria.fromPortugues(categoriaEscolhida));
         System.out.println("Séries da categoria: " + categoriaEscolhida);
+        series.forEach(System.out::println);
+    }
+
+    private void buscarSeriesPorTotalTemporada() {
+        System.out.print("Digite o total de temporadas: ");
+        var totalTemporada = leitura.nextInt();
+
+        System.out.print("Digite a avaliação: ");
+        var avaliacaoLimite = leitura.nextDouble();
+
+        series = repositorio.findByTotalTemporadasAndAvaliacaoGreaterThanEqual(totalTemporada, avaliacaoLimite);
         series.forEach(System.out::println);
     }
 }
