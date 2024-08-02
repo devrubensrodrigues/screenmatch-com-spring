@@ -180,11 +180,13 @@ public class Principal {
     private void buscarSeriesPorTotalTemporada() {
         System.out.print("Digite o total de temporadas: ");
         var totalTemporada = leitura.nextInt();
+        leitura.nextLine();
 
         System.out.print("Digite a avaliação: ");
         var avaliacaoLimite = leitura.nextDouble();
+        leitura.nextLine();
 
-        series = repositorio.findByTotalTemporadasAndAvaliacaoGreaterThanEqual(totalTemporada, avaliacaoLimite);
+        series = repositorio.seriesPorTemporadaEAvaliacao(totalTemporada, avaliacaoLimite);
         series.forEach(System.out::println);
     }
 }
