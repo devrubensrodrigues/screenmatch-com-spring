@@ -20,6 +20,7 @@ public class Principal {
     private final String API_KEY = "&apikey=53fd5cbd";
     private String json;
     private List<Serie> series = new ArrayList<>();
+    private Optional<Serie> serieBusca;
     private SerieRepository repositorio;
     public Principal(SerieRepository repositorio) {
         this.repositorio = repositorio;
@@ -30,15 +31,16 @@ public class Principal {
         var opcao = -1;
         while(opcao != 0) {
             var menu = """
-                    1- Buscar séries
-                    2- Buscar episódios
-                    3- Listar séries buscadas
-                    4- Buscar série por título
-                    5- Buscar séries por ator
-                    6- Top 5 séries
-                    7- Buscar séries por categoria
-                    8- Buscar séries por total de temporada
-                    9- Buscar episódio por trecho
+                     1- Buscar séries
+                     2- Buscar episódios
+                     3- Listar séries buscadas
+                     4- Buscar série por título
+                     5- Buscar séries por ator
+                     6- Top 5 séries
+                     7- Buscar séries por categoria
+                     8- Buscar séries por total de temporada
+                     9- Buscar episódio por trecho
+                    10- Buscando top 5 episódios de uma série
                    
                     0- Sair
                     """;
@@ -73,6 +75,9 @@ public class Principal {
                     break;
                 case 9:
                     buscarEpisodioPorTrecho();
+                    break;
+                case 10:
+                    topEpisodiosPorSerie();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -145,10 +150,10 @@ public class Principal {
     private void buscarSeriePorTitulo() {
         System.out.print("Digite o nome da série para busca:");
         var nomeSerie = leitura.nextLine();
-        Optional<Serie> serieBuscada = repositorio.findByTituloContainingIgnoreCase(nomeSerie);
+        serieBusca = repositorio.findByTituloContainingIgnoreCase(nomeSerie);
 
-        if (serieBuscada.isPresent()) {
-            System.out.println("Dados da série: " + serieBuscada.get());
+        if (serieBusca.isPresent()) {
+            System.out.println("Dados da série: " + serieBusca.get());
         } else {
             System.out.println("Série não encontrada!");
         }
@@ -167,7 +172,7 @@ public class Principal {
     }
 
     private void buscarTop5Series() {
-        series = repositorio.findTop5ByOrderByAvaliacaoDesc();
+        series = repositorio.limitaABuscaSeries5();
         series.forEach(x ->
                 System.out.println("Série: " + x.getTitulo() + " | Avaliação: " + x.getAvaliacao()));
     }
@@ -176,7 +181,7 @@ public class Principal {
         System.out.println("Deseja buscar séries de que gênero?");
         var categoriaEscolhida = leitura.nextLine();
 
-        series = repositorio.findByGenero(Categoria.fromPortugues(categoriaEscolhida));
+        series = repositorio.buscarSeriePorGenero(Categoria.fromPortugues(categoriaEscolhida));
         System.out.println("Séries da categoria: " + categoriaEscolhida);
         series.forEach(System.out::println);
     }
@@ -202,5 +207,16 @@ public class Principal {
         episodiosEncontrados.forEach(e ->
                 System.out.printf("Série: %s Temporada %s - Episodio %s - %s\n",
                         e.getSerie().getTitulo(), e.getSeason(), e.getNumberEp(), e.getTitle()));
+    }
+
+    private void topEpisodiosPorSerie() {
+        buscarSeriePorTitulo();
+        if (serieBusca.isPresent()) {
+            Serie serie = serieBusca.get();
+            List<Episodio> topEpisodios = repositorio.topEpisodiosPorSerie(serie);
+            topEpisodios.forEach(e ->
+                    System.out.printf("Série: %s Temporada %s - Episodio %s - %s Avaliação: %s\n",
+                            e.getSerie().getTitulo(), e.getSeason(), e.getNumberEp(), e.getTitle(), e.getAssessment()));
+        }
     }
 }
